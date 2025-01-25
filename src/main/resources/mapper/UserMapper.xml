@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mecol.film.mapper.UserMapper">
+    <!--根据id找用户-->
+    <select id="userById" parameterType="Integer" resultType="com.mecol.film.entity.Users">
+        select * from users where user_id=#{id} and is_delete=1
+    </select>
+    <!--登录-->
+    <select id="login" parameterType="com.mecol.film.entity.Users" resultType="com.mecol.film.entity.Users">
+        select * from users
+        <where>
+            user_account=#{userAccount} and user_password=#{userPassword} and is_delete=1
+        </where>
+    </select>
+    <!--修改-->
+    <update id="update" parameterType="com.mecol.film.entity.Users">
+        update users
+        <set>
+            <if test="userName!=null and userName!=''">
+                user_name=#{userName},
+            </if>
+            <if test="userPassword!=null and userPassword!=''">
+                user_password=#{userPassword},
+            </if>
+            <if test="sex!=null">
+                sex=#{sex},
+            </if>
+            <if test="userEmli!=null and userEmli!=''">
+                user_emli=#{userEmli},
+            </if>
+            <if test="userPhone!=null and userPhone!=''">
+                user_phone=#{userPhone},
+            </if>
+            <if test="imgUrl!=null and imgUrl!=''">
+                img_url=#{imgUrl},
+            </if>
+            <if test="lastIp!=null and lastIp!=''">
+                last_ip=#{lastIp},
+            </if>
+            <if test="updateTime!=null and updateTime!=''">
+                update_time=#{updateTime},
+            </if>
+            <if test="userMoney!=null and userMoney!=''">
+                user_money=#{userMoney},
+            </if>
+        </set>
+        where user_id=#{userId} and is_delete=1
+    </update>
+
+    <insert id="add" parameterType="com.mecol.film.entity.Users">
+        insert into users(user_name,user_account,user_password,user_emli,user_phone,create_time,update_time,img_url)
+        value
+         (#{userName},#{userAccount},#{userPassword},#{userEmli},#{userPhone},#{createTime},#{updateTime},'/img/ht.jpg')
+    </insert>
+</mapper>

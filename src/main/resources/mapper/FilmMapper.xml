@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mecol.film.mapper.FilmMapper">
+    <resultMap id="FilmMapper" type="com.mecol.film.entity.Film">
+        <id property="filmId" column="film_id"/>
+        <result property="filmName" column="film_name"/>
+        <result property="filmTime" column="film_time"/>
+        <result property="director" column="director"/>
+        <result property="playTime" column="play_time"/>
+        <result property="posterUrl" column="poster_url"/>
+        <association property="filmCategory" column="category_id" javaType="com.mecol.film.entity.FilmCategory" select="com.mecol.film.mapper.FilmCategoryMapper.type"/>
+        <association property="star" column="performer_id" javaType="com.mecol.film.entity.Performer" select="com.mecol.film.mapper.PerformerMapper.per"/>
+        <association property="screenwriters" column="screenwriter_id" javaType="com.mecol.film.entity.Screenwriter" select="com.mecol.film.mapper.ScreenwriterMapper.scr"/>
+    </resultMap>
+
+    <select id="film" parameterType="Integer" resultMap="FilmMapper">
+        select f.*,ft.category_id category_id ,sf.screenwriter_id screenwriter_id ,s.performer_id performer_id from film f,film_and_type ft,screenwriter_film sf,star s where f.film_id=#{id} and ft.film_id=#{id} and sf.film_id=#{id} and s.film_id=#{id} and f.is_delete=1
+    </select>
+
+    <select id="mohu" parameterType="String" resultMap="FilmMapper">
+        select f.*,ft.category_id category_id ,
+        sf.screenwriter_id screenwriter_id ,
+        s.performer_id performer_id
+        from film f,film_and_type ft,screenwriter_film sf,star s
+        where f.film_id=ft.film_id
+        and sf.film_id=f.film_id
+        and s.film_id=f.film_id
+        and f.is_delete=1
+        and f.film_name like "%"#{name}"%"
+    </select>
+
+    <select id="list" resultMap="FilmMapper">
+        select f.*,ft.category_id category_id ,
+        sf.screenwriter_id screenwriter_id ,
+        s.performer_id performer_id
+        from film f,film_and_type ft,screenwriter_film sf,star s
+        where f.film_id=ft.film_id
+        and sf.film_id=f.film_id
+        and s.film_id=f.film_id
+        and f.is_delete=1
+    </select>
+
+    <select id="listF" resultType="com.mecol.film.entity.Film">
+        select * from film where is_delete=1
+    </select>
+
+    <select id="isDelete" resultMap="FilmMapper">
+        select f.*,ft.category_id category_id ,sf.screenwriter_id screenwriter_id ,s.performer_id performer_id from film f,film_and_type ft,screenwriter_film sf,star s where f.film_id=ft.film_id  and sf.film_id=f.film_id and s.film_id=f.film_id and f.is_delete=0
+    </select>
+
+    <update id="delete" parameterType="Integer" >
+        update film set is_delete=0 where film_id=#{id}
+    </update>
+    <update id="up" parameterType="Integer" >
+        update film set is_delete=1 where film_id=#{id}
+    </update>
+    <insert id="add" parameterType="com.mecol.film.entity.Film">
+        insert  into film value (null,#{filmName},#{filmTime},#{director},#{playTime},#{posterUrl},1)
+    </insert>
+
+    <select id="filmByName" parameterType="String" resultType="Integer">
+        select film_id from film where film_name=#{filmName}
+    </select>
+</mapper>

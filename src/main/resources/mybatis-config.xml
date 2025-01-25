@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 全局配置 -->
+    <settings>
+        <!--驼峰开启-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--打开延迟加载的开关-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--将积极加载改为按需加载-->
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+
+    <!-- 配置分页插件 -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库-->
+            <property name="helperDialect" value="mysql"/>
+        </plugin>
+    </plugins>
+    <!--寻找映射文件-->
+    <mappers>
+
+        <mapper resource="mapper/testMapper.xml"/>
+
+        <mapper resource="mapper/UserMapper.xml"/>
+        <mapper resource="mapper/FilmMapper.xml"/>
+        <mapper resource="mapper/FilmCategoryMapper.xml"/>
+        <mapper resource="mapper/PerformerMapper.xml"/>
+        <mapper resource="mapper/ScreenwriterMapper.xml"/>
+        <mapper resource="mapper/PlayMapper.xml"/>
+        <mapper resource="mapper/RoomMapper.xml"/>
+        <mapper resource="mapper/TicketMapper.xml"/>
+        <mapper resource="mapper/SeatMapper.xml"/>
+        <mapper resource="mapper/AdminMapper.xml"/>
+
+
+    </mappers>
+</configuration>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mecol.film.mapper.TicketMapper">
+    <!--private Integer ticketId;
+    private Play play;
+    private Users user;
+    private Seat seat;
+    private String buyingTime;-->
+    <resultMap id="TicketMap" type="com.mecol.film.entity.Ticket">
+        <id property="ticketId" column="ticket_id"/>
+        <result property="buyingTime" column="buying_time"/>
+        <association property="play" column="play_id" javaType="com.mecol.film.entity.Play" select="com.mecol.film.mapper.PlayMapper.playById"/>
+        <association property="seat" column="seat_id" javaType="com.mecol.film.entity.Seat" select="com.mecol.film.mapper.SeatMapper.seatById"/>
+        <association property="user" column="user_id" javaType="com.mecol.film.entity.Seat" select="com.mecol.film.mapper.UserMapper.userById"/>
+
+    </resultMap>
+
+    <delete id="deleteById">
+        delete from ticket where ticket_id=#{ticketId}
+    </delete>
+
+    <select id="playById" parameterType="Integer" resultMap="TicketMap">
+        select t.*,p.play_id play_id ,s.seat_id seat_id from play p,ticket t,seat s where p.play_id=t.play_id and s.seat_id=t.seat_id and t.play_id=#{id}
+    </select>
+
+    <select id="userList" parameterType="Integer" resultMap="TicketMap">
+        select t.*,p.play_id play_id ,s.seat_id seat_id from play p,ticket t,seat s where p.play_id=t.play_id and s.seat_id=t.seat_id and t.user_id=#{id} ORDER BY t.ticket_id DESC
+    </select>
+
+
+    <select id="getAllUserList"
+            parameterType="Integer"
+            resultMap="TicketMap">
+        select t.*,p.play_id play_id ,s.seat_id seat_id
+        from play p,ticket t,seat s ,users
+        where p.play_id=t.play_id
+        and s.seat_id=t.seat_id
+        and t.user_id=users.user_id
+
+        ORDER BY t.ticket_id DESC
+    </select>
+
+
+
+
+    <insert id="add" parameterType="com.mecol.film.pojo.TicA">
+        insert into ticket value (null,#{playId},#{userId},#{seatId},#{buyingTime})
+    </insert>
+</mapper>

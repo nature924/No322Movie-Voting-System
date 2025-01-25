@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mecol.film.mapper.SeatMapper">
+
+    <select id="seatById" parameterType="Integer" resultType="com.mecol.film.entity.Seat">
+        select * from seat where seat_id=#{id}
+    </select>
+
+    <select id="seatBySeat" parameterType="String" resultType="com.mecol.film.entity.Seat">
+        select * from seat where seat=#{seat}
+    </select>
+
+</mapper>

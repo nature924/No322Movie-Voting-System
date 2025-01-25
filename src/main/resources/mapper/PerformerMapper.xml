@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mecol.film.mapper.PerformerMapper">
+
+    <select id="per" parameterType="Integer" resultType="com.mecol.film.entity.Performer">
+        select * from performer where performer_id=#{id}
+    </select>
+
+    <select id="list" parameterType="com.mecol.film.entity.Performer" resultType="com.mecol.film.entity.Performer">
+        select * from performer <where><if test="performerName!=null and performerName!=''">performer_name=#{performerName}</if></where>
+    </select>
+    <!--添加新演员-->
+    <insert id="add" parameterType="com.mecol.film.entity.Performer">
+        insert into performer value (null,#{performerName})
+    </insert>
+
+    <select id="starById" parameterType="com.mecol.film.pojo.Star" resultType="com.mecol.film.pojo.Star">
+        select * from star where film_id=#{filmId}
+    </select>
+    <update id="starUp" parameterType="com.mecol.film.pojo.Star">
+        update star
+        <set>
+            performer_id=#{performerId}
+        </set>
+        where film_id=#{filmId}
+    </update>
+    <insert id="starAdd" parameterType="com.mecol.film.pojo.Star">
+        insert into star value (null,#{filmId},#{performerId})
+    </insert>
+</mapper>

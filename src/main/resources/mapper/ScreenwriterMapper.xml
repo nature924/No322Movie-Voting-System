@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mecol.film.mapper.ScreenwriterMapper">
+
+    <select id="scr" parameterType="Integer" resultType="com.mecol.film.entity.Screenwriter">
+        select * from screenwriter where screenwriter_id=#{id}
+    </select>
+
+
+    <select id="list" resultType="com.mecol.film.entity.Screenwriter">
+        select * from screenwriter <if test="screenwriterName!=null and screenwriterName!=''">where screenwriter_name=#{screenwriterName}</if>
+    </select>
+
+    <!--添加编剧-->
+    <insert id="add" parameterType="com.mecol.film.entity.Screenwriter">
+        insert into screenwriter value (null,#{screenwriterName})
+    </insert>
+    <select id="ScreenwriterFilmById" parameterType="com.mecol.film.pojo.Star" resultType="com.mecol.film.pojo.ScreenwriterFilm">
+        select * from screenwriter_film where film_id=#{filmId}
+    </select>
+    <update id="ScreenwriterFilmByUp" parameterType="com.mecol.film.pojo.ScreenwriterFilm">
+        update screenwriter_film
+        <set>
+            screenwriter_film=#{ScreenwriterId}
+        </set>
+        where film_id=#{filmId}
+    </update>
+    <insert id="ScreenwriterFilmAdd" parameterType="com.mecol.film.pojo.ScreenwriterFilm">
+        insert into screenwriter_film value (null,#{filmId},#{screenwriterId})
+    </insert>
+</mapper>

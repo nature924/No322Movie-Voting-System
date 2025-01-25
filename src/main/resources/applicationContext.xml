@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!--指定扫描包-->
+    <context:component-scan base-package="com.mecol.film"/>
+    <!--配置数据源-->
+
+    <!--配置c3p0数据源-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!--注入四个数据库原属性-->
+        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"></property>
+        <property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/film?characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=CTT"></property>
+        <property name="user" value="root"></property>
+        <property name="password" value="root"></property>
+    </bean>
+    <!--添加事务支持-->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--开启事务注解-->
+    <tx:annotation-driven transaction-manager="txManager"/>
+    <!--配置Mybatis工厂，同时指定数据源，并与Mybatis完美整合-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+    <!--mapper代理开发使用Spring自动扫描Mybatis接口并装配（@Mapper）-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--mybatis-spring组件扫描器-->
+        <property name="basePackage" value="com.mecol.film.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+
+</beans>

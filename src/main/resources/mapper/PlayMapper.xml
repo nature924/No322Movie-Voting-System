@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mecol.film.mapper.PlayMapper">
+   <!-- private Integer playId;
+    private String playTime;
+    private Film film;
+    private Room room;
+    private Double money;
+    private Integer number;
+    private String createTime;
+    private String updateTime;
+    private Integer isDelete;-->
+    <resultMap id="PlayMap" type="com.mecol.film.entity.Play">
+        <id property="playId" column="play_id"/>
+        <result property="playTime" column="play_time"/>
+        <result property="money" column="money"/>
+        <result property="number" column="number"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="room" column="room_id" javaType="com.mecol.film.entity.Room" select="com.mecol.film.mapper.RoomMapper.roomById"/>
+        <association property="film" column="film_id" javaType="com.mecol.film.entity.Film" select="com.mecol.film.mapper.FilmMapper.film"/>
+    </resultMap>
+
+    <select id="playById" parameterType="Integer" resultMap="PlayMap">
+        select p.*,r.room_id room_id ,f.film_id film_id from play p,film f,room r where p.film_id=f.film_id and p.room_id=r.room_id AND p.play_id=#{playId};
+    </select>
+
+    <select id="filmById" parameterType="Integer" resultType="com.mecol.film.entity.Play">
+        select * from play where film_id=#{id} and is_delete=1
+    </select>
+
+    <select id="list" resultMap="PlayMap">
+        select * from play where is_delete=1
+    </select>
+    <select id="delist" resultMap="PlayMap">
+        select * from play where is_delete=0
+    </select>
+
+    <update id="update" parameterType="com.mecol.film.entity.Play">
+        update play
+        <set>
+            update_time=#{updateTime}, is_delete=#{isDelete}
+        </set>
+            where play_id=#{playId}
+    </update>
+
+
+    <insert id="add" parameterType="com.mecol.film.pojo.PlayPojo">
+        insert  into play values (null ,#{playTime},#{filmId},#{roomId},#{money},#{createTime},#{updateTime},1)
+    </insert>
+</mapper>
